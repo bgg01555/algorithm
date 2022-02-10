@@ -1,3 +1,6 @@
 
+node_modules
+package.json
+package-lock.json
 code.js
 입력.txt

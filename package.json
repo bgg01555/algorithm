@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/bgg01555/algorithm/issues"
   },
-  "homepage": "https://github.com/bgg01555/algorithm#readme"
+  "homepage": "https://github.com/bgg01555/algorithm#readme",
+  "dependencies": {
+    "moment-timezone": "^0.5.34"
+  }
 }
