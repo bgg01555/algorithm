@@ -1,4 +1,5 @@
 const input = require('fs').readFileSync('./dev/stdin').toString().trim().split('\n');
+
 class PriorityQueue {
     constructor() {
         this.values = []
