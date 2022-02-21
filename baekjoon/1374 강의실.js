@@ -1,5 +1,6 @@
 const input = require('fs').readFileSync('./dev/stdin').toString().trim().split('\n');
 class PriorityQueue {
+    static max_cnt=0;
     constructor() {
         this.values = []
     }
@@ -72,7 +73,6 @@ const q = new PriorityQueue();
 let n = +input[0];
 
 let lectures=[];
-let ans=0;
 for(let i=1;i<=n;i++){
     let [num,st,ed]=input[i].split(' ').map(x=>+x);
     lectures.push([num,st,ed]);
@@ -82,21 +82,21 @@ lectures.sort((a,b)=>{
     else return -1;
 })
 
+q.max_cnt=1;
 for(let i=0;i<lectures.length;i++){
     let temp = q.dequeue();
     if(temp.length===0){
         q.enqueue(lectures[i]);
-        ans = q.values.length >ans?q.values.length:ans;
         continue;
     }
 
     if(temp[2]>lectures[i][1]){
         q.enqueue(lectures[i]);
         q.enqueue(temp);
-        ans = q.values.length >ans?q.values.length:ans;
+        q.max_cnt = q.values.length > q.max_cnt ? q.values.length:q.max_cnt;
     }
     else{
         q.enqueue(lectures[i]);
     }
 }
-console.log(ans);
+console.log(q.max_cnt);

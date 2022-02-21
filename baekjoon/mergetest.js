@@ -1,6 +1,8 @@
 //const input = require('fs').readFileSync('입력.txt').toString().trim().split('\r\n');
+console.log('test');
 
 function merge(arr1, arr2) {
+    console.log('test');
 
     let idx1 = 0;
     let idx2 = 0;
@@ -43,6 +45,7 @@ function mergeSort(from, to, arr) {
     return merge(a, b);
 }
 
+console.log('test');
 // let arr = [2, 4, -10, 4, -9];
 // input[0].split(' ');
 // arr = arr.map(x => +x);
