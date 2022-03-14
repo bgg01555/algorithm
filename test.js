@@ -1,8 +1,4 @@
-// var result = sum(1,3); 
-// var sum = function(num1, num2){
-//    return console.log(num1+num2);
-// }
-
+console.log([1,2,3]||[]);
 
 
 // var result = undefined; 
