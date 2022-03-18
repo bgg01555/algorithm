@@ -22,3 +22,41 @@ console.log(str_replace);
 //split 이용한 특정 문자 제거
 let str2 = 'amdw,a,dcdwdawd'
 console.log(str2.split(',').join(''));
+
+//배열 최댓값 최솟값
+Math.max(...i)
+Math.min(...i)
+
+//이분탐색
+let l=1,r=(+arr[arr.length-1])-arr[0]+1;
+while(l+1!=r){
+    let mid = parseInt((l+r)/2);
+    if(parametricSearch(mid)) l=mid;
+    else r=mid;
+}
+console.log(l);
+
+
+//최대공약수
+let gcd = (n1, n2) => {
+    while(n2>0){
+        let temp;
+		n1 %= n2;
+
+		temp = n1;
+		n1 = n2;
+		n2 = temp;
+    }
+    return n1;
+}
+
+//최소공배수
+let lcm = (n1, n2) => {
+	return n1 * n2 / gcd(n1, n2);
+}
+
+//2차원 배열 생성
+Array.from(Array(31), () => new Array(31).fill(0));
+
+//3차원 배열 생성
+let arr = Array.from(Array(5), () => Array.from(Array(5), () => new Array(5).fill(0)));
