@@ -60,3 +60,35 @@ Array.from(Array(31), () => new Array(31).fill(0));
 
 //3차원 배열 생성
 let arr = Array.from(Array(5), () => Array.from(Array(5), () => new Array(5).fill(0)));
+
+
+//LowerBound UpperBound
+// https://gywlsp.github.io/algorithm/2/
+
+
+//반복문
+const lowerBound = (start, end, key) => {
+    let mid;
+    while (start <= end) {
+      mid = Math.floor((start + end) / 2);
+      if (numList[mid] < key) {
+        start = mid + 1;
+        continue;
+      }
+      result2 = Math.min(result2, mid);
+      end = mid - 1;
+    }
+  };
+
+  const upperBound = (start, end, key) => {
+    let mid;
+    while (start <= end) {
+      mid = Math.floor((start + end) / 2);
+      if (numList[mid] <= key) {
+        start = mid + 1;
+        continue;
+      }
+      result2 = Math.min(result2, mid);
+      end = mid - 1;
+    }
+  };
