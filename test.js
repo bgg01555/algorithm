@@ -1,4 +1,11 @@
-console.log([1,2,3]||[]);
+if('0'>=1)console.log('test');
+else console.log('1');
+
+
+// console.log([1,2,3].reduce((a,b)=>{
+//     return a+b;
+// },0));
+//console.log([1,2,3]||[]);
 
 
 // var result = undefined; 

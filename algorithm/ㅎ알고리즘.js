@@ -92,3 +92,18 @@ const lowerBound = (start, end, key) => {
       end = mid - 1;
     }
   };
+
+  //약수 개수 구하기
+  function cntdiv(n){
+    let cnt=0;
+    for(let i=1;i<=Math.sqrt(n);i++){
+          if(n%i==0){
+              if(n/i==i) cnt++;
+              else cnt=cnt+2;
+          }
+      }
+      return cnt;
+  }
+
+  정리  
+  https://velog.io/@bgg01578/Javascript-%EB%AC%B8%EB%B2%95%EC%A0%95%EB%A6%AC-1

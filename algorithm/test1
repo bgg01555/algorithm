@@ -1,0 +1,39 @@
+const input = require('fs').readFileSync('./dev/stdin').toString().trim().split('\n');
+
+let n = +input[0];
+let costs = input[1].split(' ').map(x=>+x);
+costs.unshift(0);
+
+let idx=1;
+let medicine = Array.from(Array(n+1), () => new Array(n+1).fill(0));
+for(let i=1;i<=n;i++){
+    ++idx;
+    let p = +input[idx]
+    for(let j=0;j<p;j++){
+      ++idx;
+      let [a,b] = input[idx].split(' ').map(x=>+x);      
+      medicine[i][a]=b;
+    }
+}
+let vi = Array(n+1).fill(false);
+let ans=10001;
+
+function btrc(cnt,idx,total){
+  if(cnt==n+1){
+    ans=Math.min(ans,total);
+    return;
+  }
+  for(let i=1;i<=n;i++){
+    if(vi[i]) continue;
+    vi[i]=true;
+    let next_total;
+    if(costs[i]<=0) next_total = total+1;
+    else next_total = total+costs[i];
+    for(let j=1;j<=n;j++) costs[j] -= medicine[i][j];
+    btrc(cnt+1,idx+1,next_total);  
+    for(let j=1;j<=n;j++) costs[j] += medicine[i][j]; 
+    vi[i]=false;
+  }
+}
+btrc(1,1,0);
+console.log(ans)
