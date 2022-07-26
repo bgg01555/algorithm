@@ -1,3 +1,8 @@
+const Deque = require('./node_modules/collections/deque'); //http://www.collectionsjs.com
+
+//자바스크립트 입력받기
+https://velog.io/@exploit017/%EB%B0%B1%EC%A4%80Node.js-Node.js-%EC%9E%85%EB%A0%A5-%EB%B0%9B%EA%B8%B0
+
 //2차원 배열 생성
 let arr1 = Array.from(Array(5), () => new Array(2).fill(0));
 //방법2. let arr1=new Array(k+1).fill([]).map(x=>new Array(5).fill(0));
@@ -105,5 +110,8 @@ const lowerBound = (start, end, key) => {
       return cnt;
   }
 
-  정리  
-  https://velog.io/@bgg01578/Javascript-%EB%AC%B8%EB%B2%95%EC%A0%95%EB%A6%AC-1
+  //줄바꿈 없는 출력
+  process.stdout.write();
+  
+  //  정리  
+  //  https://velog.io/@bgg01578/Javascript-%EB%AC%B8%EB%B2%95%EC%A0%95%EB%A6%AC-1
