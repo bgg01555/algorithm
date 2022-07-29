@@ -59,6 +59,9 @@ let gcd = (n1, n2) => {
 let lcm = (n1, n2) => {
 	return n1 * n2 / gcd(n1, n2);
 }
+//객체복사
+Object.assign(dest, [src1, src2, src3...]) //dest는 목표로 하는 객체, src는 복사하고자 하는 객체
+
 
 //2차원 배열 생성
 Array.from(Array(31), () => new Array(31).fill(0));
