@@ -1,5 +1,11 @@
 const Deque = require('./node_modules/collections/deque'); //http://www.collectionsjs.com
 
+//객체 키 검사
+let obj={};
+if(k in obj){
+  
+}
+
 //자바스크립트 입력받기
 https://velog.io/@exploit017/%EB%B0%B1%EC%A4%80Node.js-Node.js-%EC%9E%85%EB%A0%A5-%EB%B0%9B%EA%B8%B0
 
