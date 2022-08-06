@@ -2,6 +2,9 @@ function solution(n, info) {
     let dp = Array.from(Array(12),()=>new Array(12).fill(0));
     let route = Array.from(Array(12),()=>new Array(12).fill([]));
 
+    //화살개수 => 무게
+    //과녁점수 => 가치
+    
     for(let a=1;a<=11;a++){
         let w = info[a-1]+1;
         let v = 10-(a-1);

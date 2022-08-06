@@ -1,5 +1,59 @@
 const Deque = require('./node_modules/collections/deque'); //http://www.collectionsjs.com
 
+//딕셔너리의 키에 변수값 사용하는 법 
+https://velog.io/@aaronddy/JavaScript-object3
+
+//2차원 벡터 만들기
+let link = new Array(11);
+for(let i=0;i<link.length;i++) link[i]=[];
+
+
+/////////////////////////////////////////////////////////////////////////////////
+//원형 큐 코드
+const size = 6;
+const cq = Array(size).fill(null);
+
+let front = 0;
+let rear = 0;
+
+const isEmpty = () => rear === front;
+
+const isFull = () => (rear + 1) % size === front;
+
+const enqueue = (item) => {
+  if (isFull()) {
+    console.log("큐가 가득참");
+    return;
+  }
+  cq[rear] = item;
+  rear = (rear + 1) % size;
+  return item;
+};
+
+const dequeue = () => {
+  if (isEmpty()) {
+    console.log("큐가 비어있음");
+    return;
+  }
+  const item = cq[front];
+  cq[front] = null;
+  front = (front + 1) % size;
+  return item;
+};
+
+/* 큐의 가장 앞에있는 요소를 얻음 */
+const peek = () => cq[front];
+
+/* 큐의 모든 요소가 null이 될때까지 dequeue를 실행 */
+const clear = () => {
+  while (true) {
+    if (!dequeue()) break;
+  }
+  front = rear;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////////
 //객체 키 검사
 let obj={};
 if(k in obj){
