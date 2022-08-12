@@ -1,5 +1,8 @@
 const Deque = require('./node_modules/collections/deque'); //http://www.collectionsjs.com
 
+//2차원 배열 최댓값 구하기
+return Math.max(...dp.map((el) => Math.max(...el)));
+
 //딕셔너리의 키에 변수값 사용하는 법 
 https://velog.io/@aaronddy/JavaScript-object3
 
