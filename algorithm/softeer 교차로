@@ -1,0 +1,95 @@
+#include <iostream>
+#include <queue>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+using namespace std;
+queue<pair<int,int>> q[4];
+
+
+int conv(char w) {
+	switch (w) {
+	case 'A':
+		return 0;
+	case 'B':
+		return 1;
+	case 'C':
+		return 2;
+	case 'D':
+		return 3;
+	default:
+		return -1;
+	}
+}
+
+int main() {
+	
+	int n;
+	cin >> n;
+
+	for (int i = 0; i < n; i++) {
+		int t;char w;
+		cin >> t >> w;
+		w = conv(w);
+		q[w].push({ i,t });
+	}
+
+
+	vector<pair<int, int>> ans;
+	for (int cur = 0;; cur++) {
+		vector<int> emp;
+		int check = 0,check2=0;
+		int least = 1000000001;
+
+		for (int i = 0; i < 4; i++) {
+			if (q[i].empty()) {
+				emp.push_back(i);
+				check++;
+				continue;
+			}
+
+			int inTime = q[i].front().second;
+			if (cur < inTime) {
+				emp.push_back(i);
+				check2++;
+				least = min(least, inTime);
+			}
+		}
+
+		//큐가 전부 0 or 데드락
+		if (check == 4 || emp.size() == 0) {
+			if (emp.size()==0) {
+				for (int i = 0; i < 4; i++) {
+					while (!q[i].empty()) {
+						int idx = q[i].front().first;
+						q[i].pop();
+						ans.push_back({ idx,-1 });
+					}
+				}
+			}
+			break;
+		}
+
+		for(int i=0;i<emp.size();i++){
+			int l = (emp[i] + 1) % 4;
+			if (q[l].size() != 0) {
+				if (q[l].front().second <= cur) {
+					int idx = q[l].front().first; q[l].pop();
+					int out = cur;
+					ans.push_back({ idx,out });
+				}
+			}
+		}
+
+
+		if (check + check2 == 4) {
+			cur = least-1;
+		}
+	}
+
+	sort(ans.begin(),ans.end());
+	for (int i = 0; i < ans.size(); i++) {
+		cout << ans[i].second<<'\n';
+	}
+
+}
