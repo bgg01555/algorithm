@@ -1,0 +1,44 @@
+#include <iostream>
+#include <queue>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+#include <string>
+using namespace std;
+using pp = pair<int,int>;
+
+bool cmp(pp a, pp b) {
+	if (a.second == b.second) {
+		return a.first < b.first;
+	}
+	return a.second < b.second;
+}
+
+int main() {
+	
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	vector<pair<int, int>> timeTable;
+	int n;
+	cin >> n;
+
+	for (int i = 0; i < n; i++) {
+		int s, f;
+		cin >> s >> f;
+		timeTable.push_back({ s,f });
+	}
+
+	sort(timeTable.begin(), timeTable.end(),cmp);
+
+	int ans = 0;
+	int beforeEnd = 0;
+	for (pp i : timeTable) {
+		if (i.first >=beforeEnd) {
+			beforeEnd = i.second;
+			ans++;
+		}
+	}
+	cout << ans;
+
+}
