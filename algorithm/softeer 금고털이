@@ -1,0 +1,46 @@
+#include <iostream>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <algorithm>
+using namespace std;
+#define INF 2147483647
+using ll = long long;
+
+
+int main() {
+	
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	ll ans = 0;
+	vector<int> dp;
+	vector<pair<int, int>> jwelry;
+	int n, w;
+	cin >> w >> n;
+
+
+	dp.push_back(INF);
+	for (int i = 0; i < n; i++) {
+		int m, p;
+		cin >> m >> p;
+		jwelry.push_back({ p,m });
+	}
+	sort(jwelry.rbegin(), jwelry.rend());
+
+	int bag = 0;
+	for(int i=0;i<n;i++){
+		if (bag + jwelry[i].second <= w) {
+			bag += jwelry[i].second;
+			ans += jwelry[i].second * jwelry[i].first;
+		}
+		else {
+			int pos = w-bag;
+			bag += pos;
+			ans += pos * jwelry[i].first;
+			break;
+		}
+	}
+
+	cout << ans;
+}
