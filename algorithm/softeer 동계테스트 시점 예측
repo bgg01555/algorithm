@@ -1,0 +1,87 @@
+#include <iostream>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <algorithm>
+using namespace std;
+#define INF 2147483647
+using ll = long long;
+
+int dx[4]{ 0,0,1,-1 };
+int dy[4]{ 1,-1,0,0 };
+
+int bfs(int n, int m, int maps[][101]) {
+	int vi[101][101];
+	fill(&vi[0][0], &vi[100][101], 0);
+
+	queue<pair<int, int>> q;
+	q.push({ 0,0 });
+	vi[0][0] = true;
+
+	while (!q.empty()) {
+	
+		int x = q.front().first;
+		int y = q.front().second;
+		q.pop();
+
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+			if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+
+			if (maps[nx][ny] == 0) {
+				if (!vi[nx][ny]) {
+					vi[nx][ny] = 1;
+					q.push({ nx,ny });
+				}
+			}
+			else {// 1인 경우
+				vi[nx][ny]++;
+			}
+
+		}
+	}
+
+	int cnt = 0;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			if (maps[i][j] == 1 && vi[i][j] >= 2) {
+				maps[i][j] = 0;
+				cnt++;
+			}
+		}
+	}
+	return cnt;
+}
+
+int main() {
+	
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+
+
+	int ice = 0;
+	int maps[101][101];
+	int n, m;
+	cin >> n >> m;
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			int temp;
+			cin >> maps[i][j];
+			if (maps[i][j] == 1) ice++;
+		}
+	}
+
+	
+	int ans = 0;
+	while (ice != 0) {
+		ice -= bfs(n, m, maps);
+		ans++;
+	}
+
+	cout << ans;
+
+
+}
