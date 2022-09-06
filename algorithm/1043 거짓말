@@ -1,0 +1,126 @@
+//풀이 1 : 비트마스킹
+#include <iostream>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <algorithm>
+using namespace std;
+#define INF 2147483647
+using ll = long long;
+int main() {
+	
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+
+	int n, m;
+	int truePeople;
+	ll bitmask = 0;
+	cin >> n >> m;
+	cin >> truePeople;
+
+	for (int i = 0; i < truePeople; i++) {
+		int person;
+		cin >> person;
+		bitmask |= ((ll)1<<person);
+	}
+
+	vector<ll> party;
+	for (int i = 0; i < m; i++) {
+		ll pGroup = 0;
+		int pn;
+		cin >> pn;
+		for (int j = 0; j < pn; j++) {
+			int participatedPerson;
+			cin >> participatedPerson;
+			pGroup |= ((ll)1 << participatedPerson);
+		}
+		party.push_back(pGroup);
+	}
+
+	for (int i = 0; i < party.size(); i++) {
+		if ((party[i] & bitmask) != 0) {
+			bitmask |= party[i];
+			party.erase(party.begin() + i);
+			i = -1;
+		}
+	}
+
+	cout << party.size();
+
+}
+
+//풀이 2 : 유니온-파인드
+#include <iostream>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <algorithm>
+using namespace std;
+#define INF 2147483647
+
+
+
+
+void initParents(int parents[],int n) {
+	for (int i = 0; i <= n; i++) parents[i] = i;
+}
+int findParents(int parents[],int x) {
+	if (x == parents[x]) return x;
+	else return parents[x] = findParents(parents,parents[x]);
+}
+
+void unionParents(int parents[],int x,int y) {
+	int p1 = findParents(parents,x);
+	int p2 = findParents(parents,y);
+	parents[p1] = parents[p2];
+}
+
+int main() {
+	
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+
+	int n, m;
+	int knPeople;
+	int knowGroup = 0;
+	int parents[51];
+	cin >> n >> m;
+	cin >> knPeople;
+	initParents(parents, n);
+
+	for (int i = 0; i < knPeople; i++) {
+		int person;
+		cin >> person;
+		if (knowGroup != 0) unionParents(parents, knowGroup, person);
+		else knowGroup = findParents(parents,person);
+	}
+
+
+	vector<int> Party[51];
+	for (int i = 0; i < m; i++) {
+		int t;
+		cin >> t;
+		vector<int> pGroup;
+		int prev = -1;
+		for (int j = 0; j < t; j++) {
+			int person;
+			cin >> person;
+			if (prev != -1) unionParents(parents,prev, person);
+			else prev = person;
+			pGroup.push_back(person);
+		}
+		Party[i] = pGroup;
+	}
+
+	int ans = 0;
+	for (int i = 0; i < m; i++) {
+		int p1 = findParents(parents,Party[i][0]);
+		int p2 = findParents(parents, knowGroup);
+		if (p1 != p2) {
+			ans++;
+		}
+	}
+	cout << ans;
+}
