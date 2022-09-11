@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <string>
+using namespace std;
+#define SIZE 2005
+
+int parents[SIZE]; // node의 parent 저장
+int levelMapping[SIZE]; // node의 level 저장
+int mapping[2*SIZE]; // 문자열 index에 해당하는 node 번호 저장
+
+int levelUp(int node,int d) { 
+    // 현재 node 에서 d만큼 level을 끌어 올린 후의 node 번호 반환 
+    for (int i = 0; i < d; i++) {
+        node = parents[node];
+    }
+    return node;
+}
+
+int main()
+{
+
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+
+    stack<int> st;
+    string s;
+    int n, x, y;
+    cin >> n >> s;
+    cin >> x >> y;
+
+
+    st.push(0);
+    int idx = 0;
+    int node = 1;
+    int level = 1;
+    while (idx != s.size()) {
+        if (s[idx] == '0') {
+            parents[node] = st.top();
+            st.push(node);
+            mapping[idx] = node;
+            levelMapping[node] = level;
+
+            level++;
+            node++;
+        }
+        else {
+            mapping[idx] = st.top();
+            st.pop();
+            level--;
+        }
+        idx++;
+    }
+
+    int node1 = mapping[x-1]; // x위치에 해당하는 node 번호
+    int node2 = mapping[y-1]; // y위치에 해당하는 node 번호    
+    int levelDiff = levelMapping[node1] - levelMapping[node2]; // node1, node2의 level 차이
+
+    node1 = levelUp(node1, levelDiff); 
+    node2 = levelUp(node2, -levelDiff); 
+    // node1, node2의 level 높이 맞추기
+    
+    while (node1 != node2) {
+        node1 = parents[node1];
+        node2 = parents[node2];
+    } //최소 공통 조상 위치까지 끌어올리기
+
+    for (int i = 0; i < s.size(); i++) {
+        if (mapping[i] == node1) {
+            cout << i + 1 << ' ';
+        }
+    }
+    return 0;
+}
