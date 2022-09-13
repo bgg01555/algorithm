@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <string>
+using namespace std;
+#define SIZE 2005
+
+int main()
+{
+
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+
+    stack<int> st;
+    string s, t;
+    int alpha[26];
+    fill(alpha, alpha + 26, 0);
+    cin >> s >> t;
+    
+    for (int i = 0; i < s.size(); i++) {
+        auto idx = t.find(s[i]);
+        if (idx != string::npos) {
+            if (idx == 0) {
+                alpha[idx]++;
+            }
+            else {
+                if (alpha[idx - 1] == 0) continue;
+                alpha[idx - 1]--;
+                alpha[idx]++;
+            }
+
+        }
+    }
+
+    cout << alpha[t.size() - 1];
+    return 0;
+}
