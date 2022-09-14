@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <string>
+using namespace std;
+#define SIZE 100001
+
+queue<int> q;
+vector<int> link[SIZE][2];
+int n, m, x;
+
+void input() {
+    cin >> n >> m >> x;
+    for (int i = 0; i < m; i++) {
+        int a, b;
+        cin >> a >> b;
+        link[a][0].push_back(b);
+        link[b][1].push_back(a);
+    }
+}
+
+int bfs(int type) {
+
+    bool vi[SIZE];
+    fill(vi, vi + SIZE, false);
+    int cnt = 0;
+    q.push(x);
+    while (!q.empty()) {
+        int now = q.front();
+        q.pop();
+
+        for (int i = 0; i < link[now][type].size(); i++) {
+            int next = link[now][type][i];
+            if (!vi[next]) {
+                vi[next] = true;
+                q.push(next);
+                cnt++;
+            }
+        }
+    }
+    return cnt;
+}
+
+void solve() {
+    input();
+    int low = bfs(0); // 밑으로 존재하는 서브 트리의 노드 개수
+    int high = bfs(1); // 위로 존재하는 서브 트리의 노드 개수
+
+    cout << high + 1 << ' ' << n - low;
+
+}
+
+int main()
+{
+
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    solve();
+
+    return 0;
+}
