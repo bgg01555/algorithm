@@ -1,0 +1,68 @@
+#include <iostream>
+#include <algorithm>
+#include <string>
+using namespace std;
+#define SIZE 500001
+typedef struct link {
+    int a;
+    int b;
+}link;
+int n, m;
+int parent[SIZE];
+vector<link> arr;
+
+int findParent(int x) {
+    if (x == parent[x]) return x;
+    return parent[x] = findParent(parent[x]);
+}
+
+void unionParent(int x,int y) {
+    int p1 = findParent(x);
+    int p2 = findParent(y);
+    parent[p1] = p2;
+}
+
+void input() {
+    for (int i = 0; i < SIZE; i++) parent[i] = i;
+    cin >> n >> m;
+    for (int i = 0; i < m; i++) {
+        int a, b;
+        cin >> a >> b;
+        arr.push_back({ a,b });
+    }
+}
+
+int forCycle() {
+    int cnt = 1;
+    for (int i = 0; i < arr.size(); i++) {
+        int a = arr[i].a;
+        int b = arr[i].b;
+
+        int p1 = findParent(a);
+        int p2 = findParent(b);
+        if (p1 == p2) {
+            return cnt;
+        }
+        else {
+            parent[p1] = p2;
+        }
+        cnt++;
+    }
+
+    return 0;
+}
+
+int solve() {
+    input();
+    return forCycle();
+}
+int main()
+{
+
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    cout << solve();
+
+    return 0;
+}
