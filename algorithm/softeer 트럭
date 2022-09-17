@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+typedef struct wvp {
+	int w; //무게
+	int v; //가치
+	int p; //사람
+}wvp;
+
+int n, m, totalV;
+int vi[100001];
+vector<wvp> infoArr;
+vector<pair<int, int>> qArr, ans;
+
+bool cmp(wvp a, wvp b) {
+	if (a.w == b.w) {
+		if (a.v == b.v) {
+			return false;
+		}
+		else return a.v < b.v;
+	}
+	else return a.w < b.w;
+	
+}
+void input() {
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		int a;
+		cin >> a;
+		for (int j = 0; j < a; j++) {
+			int w, v;
+			cin >> w >> v;
+			infoArr.push_back({ w,v,i });
+		}
+	}
+	sort(infoArr.begin(), infoArr.end(),cmp);
+
+	cin >> m;
+	for (int i = 0; i < m; i++) {
+		int q;
+		cin >> q;
+		qArr.push_back({ q,i });
+	}
+	sort(qArr.begin(), qArr.end());
+
+}
+
+void solve() {
+	input();
+	int idx = 0;
+	for (int i = 0; i < infoArr.size(); i++) {
+		wvp temp = infoArr[i];
+		int w = temp.w;
+		int v = temp.v;
+		int p = temp.p;
+
+		if (vi[p] < v) {
+			totalV += (v - vi[p]);
+			vi[p] = v;
+
+			while (idx<qArr.size() && totalV >= qArr[idx].first) {
+				ans.push_back({ qArr[idx].second ,w });
+				idx++;
+			}
+
+		}
+	}
+
+	while (idx != qArr.size()) {
+		ans.push_back({ qArr[idx].second,-1 });
+		idx++;
+	}
+}
+
+int main() {
+	solve();
+	sort(ans.begin(), ans.end());
+	for (int i = 0; i < ans.size(); i++) {
+		cout << ans[i].second << ' ';
+	}
+}
