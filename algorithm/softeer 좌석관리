@@ -1,0 +1,124 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <cmath>
+using namespace std;
+
+typedef struct order {
+	string io;
+	int id;
+}order;
+
+int n, m, q;
+int maps[21][21];
+int dx[4]{ 0,0,1,-1 };
+int dy[4]{ 1,-1,0,0 };
+pair<int, int> empLoc[10001]; //사원 위치
+vector<order> orderList;
+
+
+void input() {
+	cin >> n >> m >> q;
+	for (int i = 0; i < q; i++) {
+		string io; cin >> io;
+		int id; cin >> id;
+		orderList.push_back({ io,id });
+	}
+}
+
+bool canSit(int x,int y) {
+	if (maps[x][y] != 0) return false;
+	for (int i = 0; i < 4; i++) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		if (nx<1 || nx>n || ny<1 || ny>m) continue;
+		if (maps[nx][ny] != 0) return false;
+	}
+	return true;
+}
+
+pair<int, int> setLoc(int id) {
+	pair<int, int> loc = { -1,-1 };
+	double safePoint = 0;
+	vector<pair<int, int>> SeatingStatus;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			if (maps[i][j] != 0) SeatingStatus.push_back({ i,j });
+		}
+	}
+	
+	if (SeatingStatus.size() != 0) {
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				if (canSit(i, j)) {
+					double point = 1000;
+					for (int k = 0; k < SeatingStatus.size(); k++) {
+						point = min(point, pow((i - SeatingStatus[k].first), 2) + pow((j - SeatingStatus[k].second), 2));
+					}
+
+					if (safePoint < point) {
+						safePoint = point;
+						loc = { i,j };
+					}
+				}
+			}
+		}
+		SeatingStatus.clear();
+	}
+	else {
+		loc = { 1,1 };
+	}
+	if (loc.first == -1 || loc.second == -1) return loc;
+	
+	maps[loc.first][loc.second] = id;
+	empLoc[id] = loc;
+	return loc;
+
+}//안전성이 가장 높은 자리에 배정
+
+
+
+void solve() {
+	input();
+	for (int i = 0; i < orderList.size(); i++) {
+		string io = orderList[i].io;
+		int id = orderList[i].id;
+
+		if (io == "In") {
+			if (empLoc[id].first == -1) {
+				cout << id << " already ate lunch.\n";
+			}//이미 식사를 한 사원
+			else if (empLoc[id].first != 0) {
+				cout << id << " already seated.\n";
+			}//식사중인 사원
+			else {
+				pair<int,int> loc = setLoc(id);
+				if (loc.first == -1 || loc.second == -1) {
+					cout << "There are no more seats.\n";
+				}
+				else {
+					cout << id << " gets the seat (" << loc.first << ", " << loc.second << ").\n";
+				}
+			}//식사도 하지 않고 자리도 배치받지 않은 사원
+		}
+		else {
+			if (empLoc[id].first == -1 || empLoc[id].second==-1) {
+				cout << id << " already left seat.\n";
+			}//이미 식사를 한 사원
+			else if (empLoc[id].first != 0) {
+				maps[empLoc[id].first][empLoc[id].second] = 0;
+				cout << id << " leaves from the seat (" << empLoc[id].first << ", " << empLoc[id].second << ").\n";
+				empLoc[id] = { -1,-1 };
+			}//식사중인 사원
+			else {
+				cout << id << " didn't eat lunch.\n";
+			}//식사도 하지 않고 자리도 배치받지 않은 사원
+		}//"out"
+	}
+}
+
+int main() {
+	solve();
+	
+}
