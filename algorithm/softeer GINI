@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <cmath>
+using namespace std;
+
+int dx[4]{ 0,0,1,-1 };
+int dy[4]{ 1,-1,0,0 };
+char maps[51][51];
+queue<pair<int, int>> rainQ,taebumQ;
+int r, c;
+
+bool bfs(queue<pair<int,int>> &q, char type) {
+
+	int sz = q.size();
+
+	for (int i = 0; i < sz; i++) {
+		int x = q.front().first;
+		int y = q.front().second;
+		q.pop();
+
+		if (type == 'W' && maps[x][y] == 'H') return true;
+
+		for (int j = 0; j < 4; j++) {
+			int nx = x + dx[j];
+			int ny = y + dy[j];
+
+			if (nx < 0 || nx >= r || ny < 0 || ny >= c) continue;
+			if (maps[nx][ny] == '.' ) {
+				maps[nx][ny] = type;
+				q.push({ nx,ny });
+			}
+			else if (maps[nx][ny] == 'H') {
+				if (type == 'W') {
+					q.push({ nx,ny });
+				}
+			}
+		}
+	}
+	return false;
+	
+}
+
+void input() {
+
+	cin >> r >> c;
+	for (int i = 0; i < r; i++) {
+		for (int j = 0; j < c; j++) {
+			cin >> maps[i][j];
+			if (maps[i][j] == '*') rainQ.push({ i,j });
+			if (maps[i][j] == 'W') taebumQ.push({ i,j });
+		}
+	}
+
+
+}
+
+int solve() {
+	input();
+
+
+	int cnt = 0;
+	bool check = false;
+	while (!taebumQ.empty()) {
+		bfs(rainQ, '*');
+		check |= bfs(taebumQ, 'W');
+		if (check) break;
+		cnt++;
+	}
+
+	if (check) return cnt;
+	else return 0;
+}
+
+int main() {
+	int val = solve();
+	if (val == 0) cout << "FAIL";
+	else cout << val;
+}
