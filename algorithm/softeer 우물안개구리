@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <cmath>
+using namespace std;
+#define SIZE 100001
+vector<int> W(1);
+vector<int> link[SIZE];
+bool vi[SIZE];
+int n, m;
+
+void input() {
+	cin >> n >> m;
+	for (int i = 0; i < n; i++) {
+		int t;
+		cin >> t;
+		W.push_back(t);
+	}
+	for (int i = 0; i < m; i++) {
+		int a, b;
+		cin >> a >> b;
+
+		link[a].push_back(b);
+		link[b].push_back(a);
+	}
+}
+
+int solve() {
+	int cnt = 0;
+	input();
+	for (int i = 1; i <= n; i++) {
+		bool check = true;
+		for (int j = 0; j < link[i].size(); j++) {
+			if (W[link[i][j]] >= W[i]) {
+				check = false;
+			}
+		}
+		if (check) cnt++;
+	}
+	return cnt;
+}
+
+int main() {
+	cout<<solve();
+}
