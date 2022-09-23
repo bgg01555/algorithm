@@ -1,0 +1,104 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <cmath>
+#include <string>
+using namespace std;
+#define SZ 100001
+typedef struct info {
+	int treeSize;
+	int waterSum;
+	int drainSum;
+}floorInfo;
+
+
+int n, m;
+int floorCnt;
+vector<int> water(1), drain(1);
+floorInfo info[SZ];
+int parents[SZ];
+
+int findParent(int x) {
+	if (x == parents[x]) return x;
+	else return parents[x] = findParent(parents[x]);
+}
+
+void init() {
+	for (int i = 0; i <= n; i++) parents[i] = i;
+	for (int i = 1; i <= n; i++) info[i].treeSize = 1;
+	for (int i = 1; i <= n; i++) info[i].drainSum = drain[i];
+	for (int i = 1; i <= n; i++) info[i].waterSum = water[i];
+}
+
+void input() {
+	cin >> n >> m;
+	for (int i = 0; i < n; i++) {
+		int t;
+		cin >> t;
+		drain.push_back(t);
+	}
+	
+	for (int i = 0; i < n; i++) {
+		int t;
+		cin >> t;
+		water.push_back(t);
+		if (water[i + 1] > drain[i + 1]) floorCnt++;
+	}
+
+	
+
+}
+
+void solve() {
+	input();
+	init();
+
+	for (int i = 0; i < m; i++) {
+		int order;
+		cin >> order;
+
+		if (order == 1) {
+			int a, b;
+			cin >> a >> b;
+
+			int p1 = findParent(a);
+			int p2 = findParent(b);
+
+			if (p1 != p2) {
+				floorInfo temp = info[p2];
+				info[p2].treeSize += info[p1].treeSize;
+				info[p2].waterSum += info[p1].waterSum;
+				info[p2].drainSum += info[p1].drainSum;
+				parents[p1] = p2;
+				if (temp.drainSum < temp.waterSum) {
+					if (info[p1].drainSum >= info[p1].waterSum) {
+						if (info[p2].drainSum >= info[p2].waterSum) {
+							floorCnt -= temp.treeSize;
+						}//합한 결과가 배수
+						else {
+							floorCnt += info[p1].treeSize;
+						}//합한 결과가 홍수
+					} //p2홍수 p1배수
+				}
+				else if (info[p1].drainSum < info[p1].waterSum) {
+					if (info[p2].drainSum >= info[p2].waterSum) {
+						floorCnt -= info[p1].treeSize;
+					}//합한 결과가 배수
+					else {
+						floorCnt += temp.treeSize;
+					}//합한 결과가 홍수
+				}//p2배수 p1홍수
+			}		
+		}// 마을 연결
+		else {
+			cout << floorCnt << '\n';
+		}// 홍수 마을 개수 출력
+	}
+}
+
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	solve();
+}
