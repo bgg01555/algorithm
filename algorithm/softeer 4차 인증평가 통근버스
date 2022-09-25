@@ -1,0 +1,32 @@
+#include<iostream>
+using namespace std;
+int main(int argc, char** argv)
+{
+
+	int arr[5001];
+	int lowerCnt[5001];
+	int n;
+	cin>>n;
+	fill(lowerCnt,lowerCnt+n,0);
+	for(int i=0;i<n;i++) cin>>arr[i];
+	for(int i=0;i<n;i++){
+		for(int j=i+1;j<n;j++){
+			if(arr[i] > arr[j]){
+				lowerCnt[i]++;
+			}
+		}
+	}	
+
+	long long ans=0;
+	for(int i=0;i<n;i++){
+		int temp=0;
+		for(int j=i+1;j<n;j++){
+			if(arr[i]>arr[j]) temp++;
+			if(arr[i]<arr[j]) {
+				ans+= lowerCnt[i]-temp;
+			}
+		}
+	}
+	cout<<ans;
+	return 0;
+}
