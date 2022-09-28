@@ -1,0 +1,88 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <cmath>
+#include <string>
+using namespace std;
+#define SZ 5001
+#define INF 2147483647
+
+int n, m, p, q;
+priority_queue<pair<int, int>> pq;
+vector<pair<int,int>> v[SZ];
+vector<int> home, conv;
+int dist[SZ];
+
+void input() {
+	cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		int a, b, c;
+		cin >> a >> b >> c;
+		v[a].push_back({ c,b });
+		v[b].push_back({ c,a });
+	}
+
+	cin >> p >> q;
+	for (int i = 0; i < p; i++) {
+		int t; cin >> t;
+		home.push_back(t);
+	}
+	for (int j = 0; j < q; j++) {
+		int t; cin >> t;
+		conv.push_back(t);
+	}
+
+	sort(home.begin(), home.end());
+}
+
+void init() {
+	fill(dist, dist + SZ, INF);
+}
+
+int dijkstra() {
+	for (int i = 0; i < conv.size(); i++) {
+		dist[conv[i]] = 0;
+		pq.push({ 0,conv[i] });
+	}
+
+	while (!pq.empty()) {
+		int now = pq.top().second;
+		int cost = -pq.top().first;
+		pq.pop();
+
+		for (int i = 0; i < v[now].size(); i++) {
+			int next = v[now][i].second;
+			int ncost = cost + v[now][i].first;
+
+			if (dist[next] > ncost) {
+				dist[next] = ncost;
+				pq.push({ -ncost,next });
+			}
+		}
+	}
+
+	int res = INF;
+	int ansNode;
+	for (int i = 0; i < home.size(); i++) {
+		if (dist[home[i]] != 0 && dist[home[i]] < res) {
+			res = dist[home[i]];
+			ansNode = home[i];
+		}
+	}
+	return ansNode;
+}
+void solve() {
+	input();
+	init();
+	cout<<dijkstra();
+}
+
+
+
+
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	solve();
+}
