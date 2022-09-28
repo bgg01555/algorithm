@@ -1,0 +1,78 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <cmath>
+#include <string>
+using namespace std;
+
+int n, m;
+void input() {
+	cin >> n >> m;
+}
+bool init(vector<bool>& tree, int node, int start, int end) {
+	if (start == end) return tree[node] = true;
+	int mid = (start + end) / 2;
+	return tree[node] = init(tree, node * 2, start, mid) && init(tree, node * 2 + 1, mid + 1, end);
+}
+
+void breakWall(vector<bool>& tree, bool arr[], int node, int start, int end, int left, int right) {
+	if (left > end || right < start) return;
+	if (left <= start && end <= right) {
+		if (tree[node] == false) return;
+		else tree[node] = false;
+
+	}
+
+	if (start == end) {
+		arr[start] = false;
+		return;
+	}
+	int mid = (start + end) / 2;
+	breakWall(tree, arr, node * 2, start, mid, left, right);
+	breakWall(tree, arr, node * 2 + 1, mid + 1, end, left, right);
+}
+
+
+void solve() {
+	input();
+
+	int h = (int)ceil(log2(n));
+	int tree_size = (1 << (h + 1));
+	vector<bool> tree(tree_size+1, true);
+	bool arr[1000001];
+	fill(arr, arr + 1000001, true);
+
+	init(tree, 1, 1, n - 1);
+		for (int i = 0; i < m; i++) {
+		int a, b;
+		cin >> a >> b;
+		breakWall(tree, arr, 1, 1, n, a, b - 1);
+	}
+
+	int ans = 0;
+	for (int i = 1; i <= n; i++) {
+		if (arr[i]) {
+			if (arr[i - 1]) {
+				ans++;
+			}
+		}
+		else {
+			while (!arr[i]) i++;
+			i--;
+				
+			ans++;
+
+		}
+	}
+	cout << ans;
+}
+
+
+
+
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	solve();
+}
