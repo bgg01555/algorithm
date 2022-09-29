@@ -1,0 +1,57 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <iostream>
+#include <unordered_map>
+using namespace std;
+
+
+bool sosu(int num) {
+    if (num < 2) return false;
+    int a = (int)sqrt(num);
+    for (int i = 2; i <= a; i++) {
+        if (num % i == 0) 
+            return false;
+    }
+    return true;
+}
+
+int solution(string numbers) {
+    int answer = 0;
+
+    unordered_map<int, bool> m;
+    for (int i = 0; i < numbers.length(); i++) {
+        vector<int> sel;
+        for (int j = 0; j < numbers.length() - i - 1; j++) {
+            sel.push_back(-1);
+        }
+        for (int j = 0; j < i + 1; j++) {
+            sel.push_back(1);
+        }
+
+        do{
+
+            vector<int> temp;
+            for (int i = 0; i < sel.size(); i++) {
+                if (sel[i] == 1) temp.push_back(i);
+            }
+
+            do {
+                string nums = "";
+                for (int i = 0; i < temp.size(); i++) nums += numbers[temp[i]];
+                int numInt = stoi(nums);
+                if (m[numInt]) continue;
+                m[numInt] = true;
+                if (sosu(numInt)) {
+                    answer++;
+                }
+            } while (next_permutation(temp.begin(), temp.end()));
+        } while (next_permutation(sel.begin(), sel.end()));
+    }
+    return answer;
+}
+
+int main() {
+    cout<<solution("121");
+}
