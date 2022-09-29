@@ -179,5 +179,22 @@ const lowerBound = (start, end, key) => {
   //줄바꿈 없는 출력
   process.stdout.write();
   
+
+
+  //C++
+
+  //vector assign
+  long long row = maxY - minY + 1;
+  long long col = maxX - minX + 1;
+  string temp(col, '.');
+  answer.assign(row, temp);
+  for (int i = 0; i < loc.size(); i++) {
+      long long y = loc[i].first;
+      long long x = loc[i].second;
+      answer[maxY - y][x - minX] = '*';
+  }
+
+
+
   //  정리  
   //  https://velog.io/@bgg01578/Javascript-%EB%AC%B8%EB%B2%95%EC%A0%95%EB%A6%AC-1

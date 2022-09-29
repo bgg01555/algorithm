@@ -1,0 +1,76 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+#define INF 1e18
+using ll = long long;
+
+bool cmp(pair<ll, ll> a, pair<ll, ll> b) {
+    if (a.first == b.first) {
+        return a.second < b.second;
+    }
+    else return a.first > b.first;
+}
+
+vector<string> solution(vector<vector<int>> line) {
+    vector<pair<ll, ll>> loc;
+    vector<string> answer;
+    ll maxX = -INF;
+    ll maxY = -INF;
+    ll minX = INF;
+    ll minY = INF;
+    for (int i = 0; i < line.size(); i++) {
+        for (int j = i + 1; j < line.size(); j++) {
+            ll a = line[i][0];
+            ll b = line[i][1];
+            ll e = line[i][2];
+            ll c = line[j][0];
+            ll d = line[j][1];
+            ll f = line[j][2];
+
+            ll mod = a * d - b * c;
+            if (mod == 0) continue;
+
+            ll x = (b * f - e * d);
+            ll y = (e * c - a * f);
+            if (x % mod || y % mod) continue;
+
+
+            x /= mod;
+            y /= mod;
+
+
+            maxX = max((ll)x, maxX);
+            minX = min((ll)x, minX);
+            maxY = max((ll)y, maxY);
+            minY = min((ll)y, minY);
+
+            loc.push_back({y,x });
+        }
+    }
+
+    sort(loc.begin(), loc.end(), cmp);
+    
+    int idx = 0;
+    for (ll i = maxY; i >= minY; i--) {
+        string temp = "";
+        for (ll j = minX; j <= maxX; j++) {
+            if (idx < loc.size() && i == loc[idx].first && j == loc[idx].second) {
+                temp += "*";
+                idx++;
+                
+                while (idx < loc.size() && loc[idx].first == i && loc[idx].second == j) idx++;
+            }   
+            else temp += ".";
+        }
+        answer.push_back(temp);
+
+    }
+
+    return answer;
+}
+
+int main() {
+    solution({ {1, 1,0},{1,2,0} ,{1,3,0} });
+}
