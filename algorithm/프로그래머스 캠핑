@@ -1,0 +1,43 @@
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <iostream>
+using namespace std;
+#define INF 2147483647
+int solution(int n, vector<vector<int>> data) {
+    int answer = 0;
+
+    sort(data.begin(), data.end());
+    for (int i = 0; i < data.size(); i++) {
+        pair<int, int> minLoc = { INF,INF }, maxLoc = { -1,-1 };
+        pair<int, int> minLocT = { INF,INF }, maxLocT = { -1,-1 };
+        int x = data[i][0];
+        int y = data[i][1];
+        for (int j = i + 1; j < data.size(); j++) {
+            int nx = data[j][0];
+            int ny = data[j][1];
+
+            if (data[j - 1][0] != data[j][0]) {
+                minLocT = minLoc;
+                maxLocT = maxLoc;
+            }
+
+            if (x == nx || y == ny) continue;
+            if (ny < y) {
+                if (ny > maxLoc.second) {
+                    maxLoc.second = ny;
+                    maxLoc.first = nx;
+                }
+                if (ny >= maxLocT.second || nx == maxLocT.first) answer++;
+            }
+            else if (ny > y) {
+                if (ny < minLoc.second) {
+                    minLoc.second = ny;
+                    minLoc.first = nx;
+                }
+                if (ny <= minLocT.second || nx == minLocT.first) answer++;
+            }
+        }
+    }
+    return answer;
+}
