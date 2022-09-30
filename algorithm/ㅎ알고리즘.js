@@ -195,6 +195,9 @@ const lowerBound = (start, end, key) => {
   }
 
 
+  //2차원 vector 초기화
+  vector<vector<lld>> D(p, vector<lld>(p, LINF));
+
 
   //  정리  
   //  https://velog.io/@bgg01578/Javascript-%EB%AC%B8%EB%B2%95%EC%A0%95%EB%A6%AC-1

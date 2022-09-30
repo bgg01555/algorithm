@@ -1,0 +1,45 @@
+#include <string>
+#include <vector>
+#include <cmath>
+#include <iostream>
+using namespace std;
+
+int solution(int n, int s, int a, int b, vector<vector<int>> fares) {
+    int INF = 1e8;
+    int answer = INF;
+    int floyd[201][201];
+    fill(&floyd[0][0], &floyd[200][201], INF);
+
+    for (int i = 1; i <= n; i++) floyd[i][i] = 0;
+    for (int i = 0; i < fares.size(); i++) {
+        int from = fares[i][0];
+        int to = fares[i][1];
+        int cost = fares[i][2];
+
+        floyd[from][to] = cost;
+        floyd[to][from] = cost;
+    }
+   
+    for (int k = 1; k <= n; k++) {
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (floyd[i][k] == INF || floyd[k][j] == INF) continue;
+                if (floyd[i][k] + floyd[k][j] < floyd[i][j]) {
+                    floyd[i][j] = floyd[i][k] + floyd[k][j];
+                }
+            }
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        if (i == s) continue;
+        int temp = floyd[s][i] + floyd[i][a] + floyd[i][b];
+        answer = min(answer, temp);
+    }
+    answer = min(answer, floyd[s][a]+floyd[s][b]);
+    return answer;
+}
+
+int main() {
+    cout<<solution(6, 4, 6, 2, { {4, 1, 10}, {3, 5, 24}, {5, 6, 2}, {3, 1, 41}, {5, 1, 24}, {4, 6, 50}, {2, 4, 66}, {2, 3, 22}, {1, 6, 25} });
+}
