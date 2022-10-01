@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+int btrc(int n, int cnt,vector<char>& v) {
+    if (cnt == n) {
+        if(v.size()==0) return 1;
+        return 0;
+    }
+
+    int temp = 0;
+    if (v.size() < n / 2) {
+        v.push_back('(');
+        temp += btrc(n, cnt + 1, v);
+        v.pop_back();
+    }
+
+    if(v.size()!=0){
+        v.pop_back();
+        temp+= btrc(n, cnt + 1, v);
+        v.push_back('(');
+    }
+
+    return temp;
+}
+
+int solution(int n) {
+    vector<char> v;
+    return btrc(n*2, 0, v);
+}
+
+int main() {
+    cout<<solution(4);
+}
