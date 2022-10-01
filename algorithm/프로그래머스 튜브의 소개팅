@@ -1,0 +1,60 @@
+#include <vector>
+#include <queue>
+#include <cmath>
+#include <iostream>
+using namespace std;
+using ll = long long;
+ll INF = 1e18;
+
+typedef struct routeInfo {
+    int x, y;
+    ll cost;
+}routeInfo;
+
+vector<int> solution(int m, int n, int s, vector<vector<int>> time_map) {
+    int dx[4]{ 0,0,1,-1 };
+    int dy[4]{ 1,-1,0,0 };
+    int move_distance = 0;
+    queue<routeInfo> q;
+    ll cost_map[51][51];
+    fill(&cost_map[0][0], &cost_map[50][51], INF);
+    cost_map[0][0] = 0;
+    q.push({ 0,0,0 });
+
+    vector<int> answer(2, 2147483647);
+    while (!q.empty()) {
+        int sz = q.size();
+        for (int i = 0; i < sz; i++) {
+            int x = q.front().x;
+            int y = q.front().y;
+            ll cost = q.front().cost;
+            q.pop();
+
+            if (x == m - 1 && y == n - 1) {
+                if (move_distance == answer[0]) {
+                    answer[1] = min(answer[1], (int)cost);
+                }
+                else if (move_distance < answer[0]) {
+                    answer[0] = move_distance;
+                    answer[1] = cost;
+                }
+                continue;
+            }
+
+            for (int j = 0; j < 4; j++) {
+                int nx = x + dx[j];
+                int ny = y + dy[j];
+                if (nx < 0 || nx >= m || ny < 0 || ny >= n || time_map[nx][ny] == -1) continue;
+                ll ncost = cost + time_map[nx][ny];
+                if (ncost > s || ncost >= cost_map[nx][ny]) continue;
+                cost_map[nx][ny] = ncost;
+                q.push({ nx,ny,ncost });
+            }
+        }
+        move_distance++;
+
+
+    }
+
+    return answer;
+}
