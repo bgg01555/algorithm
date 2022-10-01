@@ -35,7 +35,7 @@ int solution(int n, vector<vector<int>> results) {
     for (int i = 0; i < n; i++) {
         if (count(floyd[i].begin(), floyd[i].end(), 0) == 1) answer++;
     }
-
+    
     return answer;
 }
 int main() {
