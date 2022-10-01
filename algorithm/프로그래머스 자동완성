@@ -1,0 +1,48 @@
+#include <string>
+#include <vector>
+#include <string>
+#include <string.h>
+#include <iostream>
+using namespace std;
+
+struct Trie {
+    Trie* next[26];
+    int next2[26];
+
+    Trie(){
+        memset(next, 0, sizeof(next));
+        memset(next2, 0, sizeof(next2));
+    }
+
+    ~Trie() {
+        for (int i = 0; i < 26; i++)
+            if (next[i])
+                delete next[i];
+    }
+
+    void insert(string &key,int index) {
+        next2[key[index] - 'a']++;
+        if (index != key.length()-1) {
+            int curr = key[index] - 'a';
+            if (next[curr] == NULL) 
+                next[curr] = new Trie();
+            next[curr]->insert(key, index + 1);
+        }
+    }
+
+    int find(string& key, int index,int cnt) {
+        int curr = key[index] - 'a';
+        if (next2[curr] == 1) return cnt;
+        if (index == key.size() - 1) return key.size();
+        return next[curr]->find(key, index + 1, cnt + 1); // 다음 문자를 탐색
+    }
+
+};
+
+int solution(vector<string> words) {
+    int answer = 0;
+    Trie* Root = new Trie();
+    for (int i = 0; i < words.size(); i++) Root->insert(words[i], 0);
+    for (int i = 0; i < words.size(); i++) answer += Root->find(words[i], 0, 1);
+    return answer;
+}
