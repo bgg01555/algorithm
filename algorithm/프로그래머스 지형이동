@@ -1,0 +1,81 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <iostream>
+using namespace std;
+
+typedef struct wallInfo {
+    int cost;
+    int x, y;
+}wallInfo;
+
+struct compare {
+    bool operator()(const wallInfo& m1, const wallInfo& m2) {
+        return m1.cost > m2.cost;
+    }
+};
+
+int dx[4]{ 0,0,1,-1 };
+int dy[4]{ 1,-1,0,0 };
+
+void go(int x,int y, int height, bool vi[][301], vector<vector<int>> &land, priority_queue<wallInfo, vector<wallInfo>, compare> &pq) {
+    int n = land.size(), m = land[0].size();
+    queue<pair<int, int>> q;
+    vi[x][y] = true;
+    q.push({ x,y });
+    
+    while (!q.empty()) {
+        int nowX = q.front().first;
+        int nowY = q.front().second;
+        q.pop();
+
+        for (int i = 0; i < 4; i++) {
+            int nextX = nowX + dx[i];
+            int nextY = nowY + dy[i];
+            if (nextX < 0 || nextX >= n || nextY < 0 || nextY >= m || vi[nextX][nextY]) continue;
+
+            int cost = abs(land[nowX][nowY] - land[nextX][nextY]);
+            if (cost > height) {
+                wallInfo tmp = { cost,nextX,nextY };
+                pq.push(tmp);
+                continue;
+            }
+
+            vi[nextX][nextY] = true;
+            q.push({ nextX,nextY });
+        }
+    }
+
+
+
+
+}
+
+
+int solution(vector<vector<int>> land, int height) {
+    int answer = 0;
+
+    priority_queue<wallInfo, vector<wallInfo>, compare> pq;
+    bool vi[301][301];
+    fill(&vi[0][0], &vi[300][301], false);
+
+
+    wallInfo tmp = { 0,0,0 };
+    pq.push(tmp);
+    while (!pq.empty()) {
+        int x = pq.top().x;
+        int y = pq.top().y;
+        int cost = pq.top().cost;
+        pq.pop();
+
+        if (vi[x][y]) continue;
+        answer += cost;
+        go(x, y, height, vi, land, pq);
+    }   
+
+    return answer;
+}
+
+int main() {
+    cout<<solution({{10, 11, 10, 11}, {2, 21, 20, 10}, {1, 20, 21, 11}, {2, 1, 2, 1}}, 1);
+}
