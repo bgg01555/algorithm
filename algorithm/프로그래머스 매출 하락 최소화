@@ -1,0 +1,79 @@
+
+#include <string>
+#include <cmath>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+void dfs(vector<vector<int>> &DP, vector<vector<int>> &tree, vector<int> &sales, int leader) {
+
+    for (int i = 0; i < tree[leader].size(); i++) {
+        int member = tree[leader][i];
+        dfs(DP, tree, sales, member);
+    }
+
+    //현재 leader 포함 하는 경우
+    for (int i = 0; i < tree[leader].size(); i++) {
+        int member = tree[leader][i];
+        DP[leader][1] += min(DP[member][0], DP[member][1]);
+    }
+    DP[leader][1] += sales[leader - 1];
+   
+
+
+    //현재 leader 포함 안하는 경우
+    int minDiff = 2147483647;
+    int minMember = -1;
+    bool check = false;
+    for (int i = 0; i < tree[leader].size(); i++) {
+        int member = tree[leader][i];
+        if (DP[member][0] > DP[member][1]) {
+            check = true;//member가 하나라도 포함됨
+        }
+        else {
+            int minTemp = abs(DP[member][0] - DP[member][1]);
+            if (minTemp < minDiff) {
+                minDiff = minTemp;
+                minMember = member;
+            }
+        }
+    }
+
+    if (!check) {
+        for (int i = 0; i < tree[leader].size(); i++) {
+            int member = tree[leader][i];
+            if (member == minMember) DP[leader][0] += DP[member][1];
+            else DP[leader][0] += DP[member][0];
+        }
+    }//자식이 하나도 포함안됨
+    //자식중에 누구를 포함할지..
+    //포함한 경우와 안한 경우의 차이가 가장 작은 자식 선택하여 비용 낭비 최소화
+    else {
+        for (int i = 0; i < tree[leader].size(); i++) {
+            int member = tree[leader][i];
+            DP[leader][0] += min(DP[member][0], DP[member][1]);
+        }
+    }//자식이 하나라도 포함됨
+    
+
+}
+
+int solution(vector<int> sales, vector<vector<int>> links) {
+    int answer = 0;
+    int n = sales.size();
+    vector<vector<int>> DP(n + 1, vector<int>(2, 0));
+    vector<vector<int>> tree(n + 1, vector<int>(0));
+    for (int i = 0; i < links.size(); i++) {
+        tree[links[i][0]].push_back(links[i][1]);
+    }
+
+    dfs(DP, tree, sales, 1);
+
+    return min(DP[1][0], DP[1][1]);
+}
+
+int main() {
+    cout << solution({ 5, 6, 5, 1, 4 }, { {2,3},{1,4},{2,5},{1,2} });
+}
+
+//DP 너무 어렵다 어후
