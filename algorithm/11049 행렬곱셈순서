@@ -1,0 +1,30 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+#define INF 2147483647
+int dfs(int start,int end,vector<vector<int>> &matrixes, vector<vector<int>> &DP) {
+	if (start == end) return DP[start][end] = 0;
+	if (DP[start][end] != INF) return DP[start][end];
+
+	for (int i = start; i < end ; i++) {
+		DP[start][end] = min(DP[start][end],
+			dfs(start, i, matrixes, DP)
+			+ dfs(i + 1, end, matrixes, DP)
+			+ (matrixes[start][0] * matrixes[i][1] * matrixes[end][1]));
+	}
+	return DP[start][end];
+}
+
+int main() {
+	int n;
+	cin >> n;
+	vector<vector<int>> matrixes(n + 1, vector<int>(2));
+	vector<vector<int>> DP(n+1, vector<int>(n+1, INF));
+	for (int i = 1; i <= n; i++) {
+		cin >> matrixes[i][0] >> matrixes[i][1];
+		
+	}
+	cout << dfs(1, n, matrixes, DP);
+	
+}

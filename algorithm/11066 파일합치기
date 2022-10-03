@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+#define INF 2147483647
+int dfs(int start,int end, vector<int> &acc, vector<int> &pages, vector<vector<int>> &DP) {
+	if (start == end) return DP[start][end] = 0;
+	if (DP[start][end] != INF) return DP[start][end];
+
+	for (int i = start; i < end ; i++) {
+		DP[start][end] = min(DP[start][end], 
+			dfs(start, i, acc, pages, DP) 
+			+ dfs(i + 1, end, acc, pages, DP) 
+			+ (acc[end] - acc[start - 1]));
+	}
+	return DP[start][end];
+}
+
+int main() {
+	int tc;
+	cin >> tc;
+
+	for (int i = 0; i < tc; i++) {
+		int n;
+		cin >> n;
+		
+		vector<int> acc(n+1);
+		vector<int> pages(n+1);
+		vector<vector<int>> DP(n+1, vector<int>(n+1, INF));
+		for (int i = 1; i <= n; i++) {
+			cin >> pages[i];
+			acc[i] = acc[i - 1] + pages[i];
+		}
+		cout << dfs(1, n, acc, pages, DP) << '\n';
+	}
+}
