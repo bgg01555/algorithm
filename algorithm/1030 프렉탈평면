@@ -25,21 +25,23 @@ void recur(int nSize, int x, int y) {
 		int blackLoc = (n - k) / 2;
 		
 		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				int nextX = x+i * nSizeNext;
-				int nextY = y+j * nSizeNext;
+			for (int j = 0; j < n; j++) { // 사각형 쪼개기
+				int x1 = x+i*nSizeNext;
+				int y1 = y+j*nSizeNext;
 				
-				if (r1<=nextX+nSizeNext-1 && c1 <= nextY+nSizeNext-1  && r2>=nextX && c2>=nextY) {
-					if (i >= blackLoc && j >= blackLoc && i <= blackLoc + k-1 && j <= blackLoc + k-1) {
-						int sx = max(r1, nextX);
-						int sy = max(c1, nextY);
-						int ex = min(r2, nextX + nSizeNext - 1);
-						int ey = min(c2, nextY + nSizeNext - 1);
+				int x2 = x1+nSizeNext-1;
+				int y2 = y1+nSizeNext-1;
+				if (r1<=x2 && c1 <= y2  && r2>=x1 && c2>=y1) { //쪼개진 사각형과 (r1,c1) ~ (r2,c2)의 영역이 겹치는지
+					if (i >= blackLoc && j >= blackLoc && i <= blackLoc + k-1 && j <= blackLoc + k-1) { //쪼개진 하위 사각형이 상위 사각형의 k*k 영역에 포함되는지
+						int sx = max(r1, x1);
+						int sy = max(c1, y1);
+						int ex = min(r2, x2);
+						int ey = min(c2, y2);
 						draw(sx, sy, ex, ey, 1);
-					}//검은색 위치
+					}//k*k 영역에 포함되는 경우
 					else {
-						recur(nSizeNext, nextX, nextY);
-					}
+						recur(nSizeNext, x1, y1);
+					}//k*k 영역에 포함되지 않는 경우
 				}
 			}
 		}
