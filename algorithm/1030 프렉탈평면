@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+int s, n, k, r1, r2, c1, c2;
+int ansMap[51][51];
+
+
+void draw(int sx,int sy,int ex,int ey,int ch) {
+	for (int i = sx; i <= ex;i++) {
+		for (int j = sy; j <= ey; j++) {
+			ansMap[i - r1][j - c1] = ch;
+		}
+	}
+}
+
+void recur(int nSize, int x, int y) {
+	if (nSize == 1) {
+		ansMap[x - r1][y - c1] = 0;
+		return;
+	}
+	else {
+
+		int nSizeNext = nSize / n;
+		int blackLoc = (n - k) / 2;
+		
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				int nextX = x+i * nSizeNext;
+				int nextY = y+j * nSizeNext;
+				
+				if (r1<=nextX+nSizeNext-1 && c1 <= nextY+nSizeNext-1  && r2>=nextX && c2>=nextY) {
+					if (i >= blackLoc && j >= blackLoc && i <= blackLoc + k-1 && j <= blackLoc + k-1) {
+						int sx = max(r1, nextX);
+						int sy = max(c1, nextY);
+						int ex = min(r2, nextX + nSizeNext - 1);
+						int ey = min(c2, nextY + nSizeNext - 1);
+						draw(sx, sy, ex, ey, 1);
+					}//검은색 위치
+					else {
+						recur(nSizeNext, nextX, nextY);
+					}
+				}
+			}
+		}
+	}
+}
+
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+
+	cin >> s >> n >> k >> r1 >> r2 >> c1 >> c2;
+	recur(pow(n, s), 0, 0);
+
+	for (int i = 0; i < r2 - r1 + 1; i++) {
+		for (int j = 0; j < c2 - c1 + 1; j++) {
+			cout << ansMap[i][j];
+		}
+		cout << '\n';
+	}
+}
