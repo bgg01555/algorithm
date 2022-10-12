@@ -1,0 +1,62 @@
+
+function calcMin(n,weak,sel){
+    for(let k=0;k<weak.length;k++){
+        let sIdx=k;
+        let cnt=0;
+        for(let i=0;i<sel.length;i++){
+            let start = weak[sIdx];
+            let end = (weak[sIdx]+sel[i])%n;
+            while(cnt!=weak.length && ((start<=weak[sIdx] && weak[sIdx]<=end) || (start>end && (start<=weak[sIdx] || weak[sIdx]<=end )))){
+                cnt++;
+                sIdx++;
+                sIdx%=weak.length;
+            }
+            if(cnt==weak.length){
+                return true;
+            }//모든 경우 커버
+        }    
+    }
+    return false;
+}
+
+function btrc(n,weak,dist,sel,vi){
+    if(sel.length==dist.length){
+        if(calcMin(n,weak,sel)) return sel.length;
+        else return 101;
+    }
+    
+    if(calcMin(n,weak,sel)) {
+        return sel.length;
+    }
+
+    let temp=101;
+    for(let i=0;i<dist.length;i++){
+        if(!vi[i]){
+            vi[i]=true;
+            sel.push(dist[i]);
+            temp=Math.min(temp,btrc(n,weak,dist,sel,vi));
+            sel.pop();
+            vi[i]=false;
+        }
+    }
+    
+    return temp;
+    
+}
+
+function solution(n, weak, dist) {
+    
+    for(let i=0;i<dist.length;i++){
+        if(dist[i]>=n-1) return 1;
+    }
+
+    var answer = 0;
+    let sel = [];
+    let vi = new Array(weak.length).fill(false);
+    answer = btrc(n,weak,dist,sel,vi);
+
+    if(answer == 101) return -1;
+    return answer;
+}
+
+console.log(solution(12,[1,5,6,10],[1,1]));

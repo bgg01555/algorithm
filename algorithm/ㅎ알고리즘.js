@@ -57,11 +57,75 @@ const clear = () => {
 
 
 /////////////////////////////////////////////////////////////////////////////////
+
+//특정 문자 개수 세기
+const str = "동.해-물.과 백ㄷ.산ㅇ- 동- 동. 동 해 물";
+const chars = [".", ",", "-", "동", "해", "물", "과", "백", "산", "ㄷ", "ㅇ"];
+console.log(". 개수 :", str.match(/\./g)?.length);
+console.log(", 개수 :", str.match(/\,/g)?.length);
+console.log("- 개수 :", str.match(/\-/g)?.length);
+console.log("동 개수 :", str.match(/동/g)?.length);
+console.log("해 개수 :", str.match(/해/g)?.length);
+
+//정규식 연습 문제
+
+
+
+
+//객체 배열 선언
+let arr = new Array(5).fill('lol');
+let arr2 = new Array(5).fill({ test: 'a' });
+// or if you want different objects
+let arr3 = new Array(5).fill().map((_, i) => ({ id: i }));
+
+
+
 //객체 키 검사
 let obj={};
 if(k in obj){
   
 }
+
+
+
+//객체 순회
+const keys = Object.keys(obj) // ['name', 'weight', 'price', 'isFresh']
+
+for (let i = 0; i < keys.length; i++) {
+  const key = keys[i] // 각각의 키
+  const value = obj[key] // 각각의 키에 해당하는 각각의 값
+
+  console.log(value)
+}
+
+const values = Object.values(obj) //val
+// values === ['melon', 4350, 16500, true]
+
+const entries = Object.entries(obj) // key,val
+/*
+entries === [
+  ['name', 'melon'],
+  ['weight', 4350],
+  ['price', 16500],
+  ['isFresh', true]
+]
+*/
+
+const obj = {
+  name: 'melon',
+  weight: 4350,
+  price: 16500,
+  isFresh: true
+}
+
+for (let key in obj) {
+  const value = obj[key]
+
+  console.log(key)
+  console.log(value)
+}
+
+
 
 //자바스크립트 입력받기
 https://velog.io/@exploit017/%EB%B0%B1%EC%A4%80Node.js-Node.js-%EC%9E%85%EB%A0%A5-%EB%B0%9B%EA%B8%B0
