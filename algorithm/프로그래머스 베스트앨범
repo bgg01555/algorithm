@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+typedef struct songInfo {
+    string name;
+    int totalplays;
+    vector<pair<int, int>> playInfo;
+}songInfo;
+bool cmp(pair<string, songInfo> a, pair<string, songInfo> b) {
+    return a.second.totalplays > b.second.totalplays;
+}
+
+bool cmp2(pair<int, int> a, pair<int, int> b) {
+    if (a.first == b.first) {
+        a.second < b.second;
+    }
+    return a.first > b.first;
+}
+
+vector<int> solution(vector<string> genres, vector<int> plays) {
+    vector<int> answer;
+    unordered_map <string,songInfo> m;
+    for (int i = 0; i < genres.size(); i++) {
+        m[genres[i]].totalplays += plays[i];
+        m[genres[i]].playInfo.push_back({ plays[i],i });
+    }
+
+    vector<pair<string,songInfo>> vec(m.begin(), m.end());
+    sort(vec.begin(), vec.end(), cmp);
+    for (int i = 0; i < vec.size(); i++) {
+        sort(vec[i].second.playInfo.begin() , vec[i].second.playInfo.end(), cmp2);
+        if (vec[i].second.playInfo.size() == 1) {
+            answer.push_back(vec[i].second.playInfo[0].second);
+        }
+        else {
+            answer.push_back(vec[i].second.playInfo[0].second);
+            answer.push_back(vec[i].second.playInfo[1].second);
+        }
+
+    }
+  
+
+
+    return answer;
+}
+
+int main() {
+    solution({ "classic", "pop", "classic", "classic", "pop" }, { 500, 600, 150, 800, 2500 });
+}
