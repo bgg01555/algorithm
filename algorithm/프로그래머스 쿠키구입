@@ -1,0 +1,30 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int can(int sumArr[], int start,int end){
+    int l=start,r=end+1;
+    while(l+1!=r){
+        int mid = (l+r)/2;
+        if(sumArr[mid]-sumArr[start-1] > sumArr[end]-sumArr[mid]) r=mid;
+        else l=mid;
+    }
+    if(sumArr[l]-sumArr[start-1] == sumArr[end] - sumArr[l]) return sumArr[l]-sumArr[start-1];
+    return 0;
+}
+
+int solution(vector<int> cookie) {
+    int answer=0;
+    int sumArr[2001];
+    fill(sumArr,sumArr+2001,0);
+    sumArr[1]=cookie[0];
+    for(int i=2;i<=cookie.size();i++) sumArr[i] = sumArr[i-1]+cookie[i-1];
+    
+    for(int i=0;i<cookie.size();i++){
+        for(int j=i+1;j<cookie.size();j++){
+            answer = max(answer,can(sumArr,i+1,j+1));
+        }
+    }
+    return answer;
+}
