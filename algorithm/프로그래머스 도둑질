@@ -1,0 +1,30 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#define SZ 1000001
+using namespace std;
+
+int solution(vector<int> money) {
+    int answer = 0;
+    int dp[SZ];
+    fill(dp,dp+SZ,0);
+    dp[0]=money[0];
+    dp[2]=money[0]+money[2];
+    for(int i=3;i<money.size();i++){
+        dp[i]=max(dp[i-2],dp[i-3])+money[i];
+    }
+    dp[money.size()-1]=0;
+    
+    answer = *max_element(dp,dp+SZ);
+    fill(dp,dp+SZ,0);
+    dp[1]=money[1];
+    dp[2]=money[2];
+    for(int i=3;i<money.size();i++){
+        dp[i]=max(dp[i-2],dp[i-3])+money[i];
+    }
+
+    answer = max(answer,*max_element(dp,dp+SZ));
+    
+    return answer;
+}
