@@ -1,0 +1,34 @@
+#include <string>
+#include <vector>
+#include <cmath>
+#include <unordered_map>
+using namespace std;
+
+vector<int> solution(vector<string> gems) {
+    unordered_map<string,int> m;
+    int l=0;
+    int start=0,end=gems.size();
+    for(int i=0;i<gems.size();i++){
+        m[gems[i]]++;
+        if(m[gems[i]]==1){
+            while(m[gems[l]]!=1){
+                m[gems[l]]--;
+                l++;
+            }
+            start=l;
+            end=i;            
+        }
+        else{
+            while(m[gems[l]]!=1){
+                m[gems[l]]--;
+                l++;
+            }
+            if(i-l<end-start){
+                start=l;
+                end=i;
+            }           
+        }
+    }
+    
+    return {start+1,end+1};
+}
